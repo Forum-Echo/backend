@@ -3,7 +3,7 @@ import { find, insert } from '../../../utils/database/database.providers';
 
 @Injectable()
 export class NewPostService {
-  async newPost(title: string, content: string) {
+  async newPost(title: string, content: string): Promise<any> {
     if (!title || !content) {
       throw new BadRequestException();
     }
