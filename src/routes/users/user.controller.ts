@@ -21,9 +21,9 @@ export class UserController {
   // POST /register
   @Post('register')
   register(
-    @Body('username') username,
-    @Body('password') password,
-    @Body('email') email,
+    @Body('username') username: string,
+    @Body('password') password: string,
+    @Body('email') email: string,
   ): any {
     return this.registerService.register(username, password, email);
   }
