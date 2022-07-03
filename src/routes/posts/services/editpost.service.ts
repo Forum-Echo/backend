@@ -16,8 +16,6 @@ export class EditPostService {
       'posts',
     );
 
-    console.log(dbResponse);
-
     if (dbResponse.matchedCount === 0) {
       return { error: 'post_does_not_exist' };
     }
