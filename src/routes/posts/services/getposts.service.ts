@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { find } from "../../../utils/database/database.providers";
+import { Injectable } from '@nestjs/common';
+import { find } from '../../../utils/database/database.providers';
 
 @Injectable()
 export class GetPostsService {
