@@ -28,6 +28,7 @@ export class NewPostService {
         upvotes: 0,
         downvotes: 0,
         content: content,
+        creation_date: new Date(),
       },
       'posts',
       'posts',
