@@ -23,13 +23,13 @@ export class PostController {
     private readonly editPostService: EditPostService,
   ) {}
 
-  // GET /
+  // GET /  (Get all Posts)
   @Get('')
   getPosts(): any {
     return this.getPostsService.getPosts();
   }
 
-  // POST /new
+  // POST /new  (New Post)
   @UseGuards(JwtAuthGuard)
   @Post('new')
   newPost(
@@ -40,12 +40,14 @@ export class PostController {
     return this.newPostService.newPost(req.user.id, title, content);
   }
 
-  // POST /vote
+  // POST /vote (Up/Down-vote)
+  @UseGuards(JwtAuthGuard)
   @Post('vote')
   upvote(@Body('type') type: boolean, @Body('post_id') post_id): any {
     return this.voteService.vote(type, post_id);
   }
 
+  // PATCH /edit (Edit Post)
   @UseGuards(JwtAuthGuard)
   @Patch('edit')
   editPost(

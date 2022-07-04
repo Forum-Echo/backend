@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guard/jwt.guard';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { RegisterService } from './services/register.service';
 import { LocalAuthGuard } from '../auth/guard/local.guard';
@@ -33,12 +25,5 @@ export class UserController {
   @Post('login')
   login(@Request() req): any {
     return this.authService.login(req.user);
-  }
-
-  // GET /protected
-  @UseGuards(JwtAuthGuard)
-  @Get('protected')
-  getProtected(@Request() req): string {
-    return req.user;
   }
 }
