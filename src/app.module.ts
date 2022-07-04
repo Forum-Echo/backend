@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UserModule } from './routes/users/user.module';
 import { AuthModule } from './routes/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -16,6 +15,6 @@ import { PostModule } from './routes/posts/post.module';
     ),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}
