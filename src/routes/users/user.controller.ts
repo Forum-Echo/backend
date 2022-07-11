@@ -1,13 +1,23 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Patch,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { RegisterService } from './services/register.service';
 import { LocalAuthGuard } from '../auth/guard/local.guard';
+import { JwtAuthGuard } from '../auth/guard/jwt.guard';
+import { EditUserService } from './services/edituser.service';
 
 @Controller('user')
 export class UserController {
   constructor(
     private readonly authService: AuthService,
     private readonly registerService: RegisterService,
+    private readonly editUserService: EditUserService,
   ) {}
 
   // POST /register
@@ -25,5 +35,15 @@ export class UserController {
   @Post('login')
   login(@Request() req): any {
     return this.authService.login(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('edit')
+  edit(
+    @Body('user_id') user_id: string,
+    @Body('new_password') new_password: string,
+    @Body('new_username') new_username: string,
+  ): any {
+    return this.editUserService.editUser(user_id, new_password, new_username);
   }
 }
