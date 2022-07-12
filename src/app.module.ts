@@ -10,9 +10,9 @@ import { PostModule } from './routes/posts/post.module';
     UserModule,
     AuthModule,
     PostModule,
-    MongooseModule.forRoot(
+    /*MongooseModule.forRoot(
       'mongodb+srv://admin:TWBYJ6KA7o5WZGFx@forumecho.pgc3t9e.mongodb.net/users?retryWrites=true&w=majority',
-    ),
+    ),*/
   ],
   controllers: [AppController],
   providers: [],

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Patch,
   Post,
   Request,
@@ -11,7 +12,6 @@ import { NewPostService } from './services/newpost.service';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 import { GetPostsService } from './services/getposts.service';
 import { VoteService } from './services/vote.service';
-import * as Path from 'path';
 import { EditPostService } from './services/editpost.service';
 
 @Controller('post')
@@ -24,9 +24,9 @@ export class PostController {
   ) {}
 
   // GET /  (Get all Posts)
-  @Get('')
-  getPosts(): any {
-    return this.getPostsService.getPosts();
+  @Get(':post_id')
+  getPosts(@Param('post_id') post_id: string): any {
+    return this.getPostsService.getPosts(post_id);
   }
 
   // POST /new  (New Post)
