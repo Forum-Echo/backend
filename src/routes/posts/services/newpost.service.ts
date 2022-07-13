@@ -25,8 +25,8 @@ export class NewPostService {
       {
         author_id: id,
         title: title,
-        upvotes: 0,
-        downvotes: 0,
+        liked_by: [],
+        disliked_by: [],
         content: content,
         creation_date: new Date(),
       },

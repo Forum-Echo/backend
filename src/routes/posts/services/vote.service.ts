@@ -11,34 +11,43 @@ export class VoteService {
       'posts',
     );
 
-    console.log(dbResponse);
-
     if (type) {
-      return await this.upvote(post_id, dbResponse[0].upvotes);
+      return await this.upvote(
+        post_id,
+        dbResponse[0].liked_by,
+        dbResponse[0].author_id,
+      );
     } else {
-      return await this.downVote(post_id, dbResponse[0].downvotes);
+      return await this.downVote(
+        post_id,
+        dbResponse[0].disliked_by,
+        dbResponse[0].author_id,
+      );
     }
   }
 
-  async upvote(post_id: string, upvotes: number) {
+  async upvote(post_id: string, upvotes: string[], author_id: string) {
+    upvotes.push(author_id);
+    console.log(upvotes);
     await update(
       { _id: new ObjectId(post_id) },
-      { $set: { upvotes: upvotes + 1 } },
+      { $set: { liked_by: upvotes } },
       'posts',
       'posts',
     );
 
-    return { upvotes: upvotes + 1 };
+    return { liked_by: upvotes };
   }
 
-  async downVote(post_id: string, downvotes: number) {
+  async downVote(post_id: string, downvotes: string[], author_id: string) {
+    downvotes.push(author_id);
+    console.log(downvotes);
     await update(
       { _id: new ObjectId(post_id) },
-      { $set: { downvotes: downvotes + 1 } },
+      { $set: { disliked_by: downvotes } },
       'posts',
       'posts',
     );
-
-    return { downvotes: downvotes + 1 };
+    return { disliked_by: downvotes };
   }
 }

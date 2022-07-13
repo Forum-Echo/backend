@@ -5,10 +5,14 @@ import { ObjectId } from 'mongodb';
 @Injectable()
 export class GetPostsService {
   async getPosts(post_id: string): Promise<any> {
-    if (!post_id) {
-      return await find({}, 'posts', 'posts');
+    let dbResponse;
+
+    if (post_id === 'false') {
+      dbResponse = await find({}, 'posts', 'posts');
+      return dbResponse;
     }
 
-    return await find({ _id: new ObjectId(post_id) }, 'posts', 'posts');
+    dbResponse = await find({ _id: new ObjectId(post_id) }, 'posts', 'posts');
+    return dbResponse[0];
   }
 }

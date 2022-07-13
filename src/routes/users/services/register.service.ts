@@ -34,7 +34,7 @@ export class RegisterService {
 
     const hashedPassword = this.hash(password);
 
-    return await insert(
+    await insert(
       {
         username: `${username}`,
         password: `${hashedPassword}`,
@@ -43,6 +43,8 @@ export class RegisterService {
       'users',
       'users',
     );
+
+    return { success: true };
   }
 
   hash(password) {
