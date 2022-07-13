@@ -27,8 +27,20 @@ export class VoteService {
   }
 
   async upvote(post_id: string, upvotes: string[], author_id: string) {
-    upvotes.push(author_id);
-    console.log(upvotes);
+    let flag = 0;
+
+    for (let i = 0; i < upvotes.length; i++) {
+      if (upvotes[i] === post_id) {
+        upvotes.splice(i, 1);
+        flag = 1;
+        break;
+      }
+    }
+
+    if (flag === 0) {
+      upvotes.push(author_id);
+    }
+
     await update(
       { _id: new ObjectId(post_id) },
       { $set: { liked_by: upvotes } },
@@ -40,8 +52,19 @@ export class VoteService {
   }
 
   async downVote(post_id: string, downvotes: string[], author_id: string) {
-    downvotes.push(author_id);
-    console.log(downvotes);
+    let flag = 0;
+
+    for (let i = 0; i < downvotes.length; i++) {
+      if (downvotes[i] === post_id) {
+        downvotes.splice(i, 1);
+        flag = 1;
+        break;
+      }
+    }
+
+    if (flag === 0) {
+      downvotes.push(author_id);
+    }
     await update(
       { _id: new ObjectId(post_id) },
       { $set: { disliked_by: downvotes } },

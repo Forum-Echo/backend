@@ -42,7 +42,7 @@ export class PostController {
 
   // POST /vote (Up/Down-vote)
   @UseGuards(JwtAuthGuard)
-  @Post('vote')
+  @Patch('vote')
   upvote(@Body('type') type: boolean, @Body('post_id') post_id): any {
     return this.voteService.vote(type, post_id);
   }
