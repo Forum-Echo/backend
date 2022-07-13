@@ -4,25 +4,21 @@ import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class VoteService {
-  async vote(type: boolean, post_id: string) {
+  async vote(type: boolean, post_id: string, author_id: string) {
     const dbResponse = await find(
       { _id: new ObjectId(post_id) },
       'posts',
       'posts',
     );
 
+    if (!dbResponse[0]) {
+      return { error: 'post_not_found' };
+    }
+
     if (type) {
-      return await this.upvote(
-        post_id,
-        dbResponse[0].liked_by,
-        dbResponse[0].author_id,
-      );
+      return await this.upvote(post_id, dbResponse[0].liked_by, author_id);
     } else {
-      return await this.downVote(
-        post_id,
-        dbResponse[0].disliked_by,
-        dbResponse[0].author_id,
-      );
+      return await this.downVote(post_id, dbResponse[0].disliked_by, author_id);
     }
   }
 
@@ -30,7 +26,7 @@ export class VoteService {
     let flag = 0;
 
     for (let i = 0; i < upvotes.length; i++) {
-      if (upvotes[i] === post_id) {
+      if (upvotes[i] === author_id) {
         upvotes.splice(i, 1);
         flag = 1;
         break;
@@ -55,7 +51,7 @@ export class VoteService {
     let flag = 0;
 
     for (let i = 0; i < downvotes.length; i++) {
-      if (downvotes[i] === post_id) {
+      if (downvotes[i] === author_id) {
         downvotes.splice(i, 1);
         flag = 1;
         break;
@@ -65,6 +61,7 @@ export class VoteService {
     if (flag === 0) {
       downvotes.push(author_id);
     }
+
     await update(
       { _id: new ObjectId(post_id) },
       { $set: { disliked_by: downvotes } },

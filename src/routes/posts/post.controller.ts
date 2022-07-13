@@ -43,8 +43,12 @@ export class PostController {
   // POST /vote (Up/Down-vote)
   @UseGuards(JwtAuthGuard)
   @Patch('vote')
-  upvote(@Body('type') type: boolean, @Body('post_id') post_id): any {
-    return this.voteService.vote(type, post_id);
+  upvote(
+    @Body('type') type: boolean,
+    @Body('post_id') post_id: string,
+    @Body('author_id') author_id: string,
+  ): any {
+    return this.voteService.vote(type, post_id, author_id);
   }
 
   // PATCH /edit (Edit Post)
