@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -15,6 +16,7 @@ import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 import { EditUserService } from './services/edituser.service';
 import { GetUserService } from './services/getuser.service';
 import { UserGuard } from '../auth/guard/user.guard';
+import { DelUserService } from './services/deluser.service';
 
 @Controller('user')
 export class UserController {
@@ -23,6 +25,7 @@ export class UserController {
     private readonly registerService: RegisterService,
     private readonly editUserService: EditUserService,
     private readonly getUserService: GetUserService,
+    private readonly delUserService: DelUserService,
   ) {}
 
   // POST /register
@@ -60,5 +63,11 @@ export class UserController {
   @Get(':user_id')
   getUser(@Param('user_id') user_id: string): any {
     return this.getUserService.getUser(user_id);
+  }
+
+  @UseGuards(UserGuard)
+  @Delete('')
+  async deleteUser(@Request() req: any) {
+    return this.delUserService.deleteUser(req.user.id);
   }
 }
