@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -13,14 +14,18 @@ import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 import { GetPostsService } from './services/getposts.service';
 import { VoteService } from './services/vote.service';
 import { EditPostService } from './services/editpost.service';
+import { DeletePostService } from './services/deletepost.service';
+import { UserGuard } from '../auth/guard/user.guard';
 
 @Controller('post')
+@UseGuards(JwtAuthGuard)
 export class PostController {
   constructor(
     private readonly newPostService: NewPostService,
     private readonly getPostsService: GetPostsService,
     private readonly voteService: VoteService,
     private readonly editPostService: EditPostService,
+    private readonly deletePostService: DeletePostService,
   ) {}
 
   // GET /  (Get all Posts)
@@ -30,7 +35,7 @@ export class PostController {
   }
 
   // POST /new  (New Post)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(UserGuard)
   @Post('new')
   newPost(
     @Request() req,
@@ -41,24 +46,31 @@ export class PostController {
   }
 
   // POST /vote (Up/Down-vote)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(UserGuard)
   @Patch('vote')
   upvote(
+    @Request() req,
     @Body('type') type: boolean,
     @Body('post_id') post_id: string,
-    @Body('author_id') author_id: string,
   ): any {
-    return this.voteService.vote(type, post_id, author_id);
+    return this.voteService.vote(type, post_id, req.user.id);
   }
 
   // PATCH /edit (Edit Post)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(UserGuard)
   @Patch('edit')
   editPost(
     @Body('post_id') post_id,
     @Body('title') title,
     @Body('content') content,
-  ) {
+  ): any {
     return this.editPostService.editPost(post_id, title, content);
+  }
+
+  // DELETE /del
+  @UseGuards(UserGuard)
+  @Delete('del')
+  deletePost(@Body('post_id') post_id: string): any {
+    return this.deletePostService.deletePost(post_id);
   }
 }

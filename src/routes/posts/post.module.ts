@@ -4,10 +4,19 @@ import { PostController } from './post.controller';
 import { GetPostsService } from './services/getposts.service';
 import { VoteService } from './services/vote.service';
 import { EditPostService } from './services/editpost.service';
+import { DeletePostService } from './services/deletepost.service';
+import { UserStrategy } from '../auth/strategy/user.strategy';
 
 @Module({
   imports: [],
-  providers: [NewPostService, GetPostsService, VoteService, EditPostService],
+  providers: [
+    UserStrategy,
+    NewPostService,
+    GetPostsService,
+    VoteService,
+    EditPostService,
+    DeletePostService,
+  ],
   controllers: [PostController],
 })
 export class PostModule {}

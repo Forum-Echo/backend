@@ -14,6 +14,7 @@ import { LocalAuthGuard } from '../auth/guard/local.guard';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 import { EditUserService } from './services/edituser.service';
 import { GetUserService } from './services/getuser.service';
+import { UserGuard } from '../auth/guard/user.guard';
 
 @Controller('user')
 export class UserController {
@@ -41,14 +42,18 @@ export class UserController {
     return this.authService.login(req.user);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserGuard)
   @Patch('edit')
   edit(
-    @Body('user_id') user_id: string,
+    @Request() req: any,
     @Body('new_password') new_password: string,
     @Body('new_username') new_username: string,
   ): any {
-    return this.editUserService.editUser(user_id, new_password, new_username);
+    return this.editUserService.editUser(
+      req.user.id,
+      new_password,
+      new_username,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
