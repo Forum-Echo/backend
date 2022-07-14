@@ -9,6 +9,7 @@ import { UserStrategy } from './strategy/user.strategy';
 
 @Module({
   imports: [
+    AuthModule,
     forwardRef(() => UserModule),
     PassportModule,
     JwtModule.register({
@@ -16,7 +17,13 @@ import { UserStrategy } from './strategy/user.strategy';
       signOptions: { expiresIn: '7d' },
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, UserStrategy],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    UserStrategy,
+    UserStrategy,
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}

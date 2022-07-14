@@ -5,11 +5,18 @@ import { AuthModule } from '../auth/auth.module';
 import { RegisterService } from './services/register.service';
 import { EditUserService } from './services/edituser.service';
 import { GetUserService } from './services/getuser.service';
+import { UserStrategy } from '../auth/strategy/user.strategy';
 
 @Module({
   imports: [AuthModule],
   controllers: [UserController],
-  providers: [LoginService, RegisterService, EditUserService, GetUserService],
+  providers: [
+    LoginService,
+    RegisterService,
+    EditUserService,
+    GetUserService,
+    UserStrategy,
+  ],
   exports: [LoginService],
 })
 export class UserModule {}
