@@ -18,7 +18,6 @@ import { DeletePostService } from './services/deletepost.service';
 import { UserGuard } from '../auth/guard/user.guard';
 
 @Controller('post')
-@UseGuards(JwtAuthGuard)
 export class PostController {
   constructor(
     private readonly newPostService: NewPostService,
@@ -35,7 +34,7 @@ export class PostController {
   }
 
   // POST /new  (New Post)
-  @UseGuards(UserGuard)
+  @UseGuards(JwtAuthGuard, UserGuard)
   @Post('new')
   newPost(
     @Request() req,
@@ -46,7 +45,7 @@ export class PostController {
   }
 
   // POST /vote (Up/Down-vote)
-  @UseGuards(UserGuard)
+  @UseGuards(JwtAuthGuard, UserGuard)
   @Patch('vote')
   upvote(
     @Request() req,
@@ -57,7 +56,7 @@ export class PostController {
   }
 
   // PATCH /edit (Edit Post)
-  @UseGuards(UserGuard)
+  @UseGuards(JwtAuthGuard, UserGuard)
   @Patch('edit')
   editPost(
     @Body('post_id') post_id,
@@ -68,7 +67,7 @@ export class PostController {
   }
 
   // DELETE /del
-  @UseGuards(UserGuard)
+  @UseGuards(JwtAuthGuard, UserGuard)
   @Delete('del')
   deletePost(@Body('post_id') post_id: string): any {
     return this.deletePostService.deletePost(post_id);
