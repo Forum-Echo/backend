@@ -1,6 +1,7 @@
 import { MongoClient } from 'mongodb';
 
-const db_url = `mongodb+srv://admin:TWBYJ6KA7o5WZGFx@forumecho.pgc3t9e.mongodb.net/?retryWrites=true&w=majority`;
+// const db_url = `mongodb+srv://admin:TWBYJ6KA7o5WZGFx@forumecho.pgc3t9e.mongodb.net/?retryWrites=true&w=majority`;
+const db_url = 'mongodb://localhost:27017';
 const client = new MongoClient(db_url);
 
 client.connect();
@@ -26,7 +27,10 @@ export async function insert(amplifier, target_collection, target_database) {
 
 // Delete
 export async function del(filter, target_collection, target_database) {
-  return await target_database.collection(target_collection).deleteMany(filter);
+  return await client
+    .db(target_database)
+    .collection(target_collection)
+    .deleteMany(filter);
 }
 
 //Update
