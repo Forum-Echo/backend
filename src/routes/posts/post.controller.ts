@@ -9,28 +9,22 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { NewPostService } from './services/newpost.service';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
-import { GetPostsService } from './services/getposts.service';
 import { VoteService } from './services/vote.service';
-import { EditPostService } from './services/editpost.service';
-import { DeletePostService } from './services/deletepost.service';
 import { UserGuard } from '../auth/guard/user.guard';
+import { PostService } from './services/post.service';
 
 @Controller('post')
 export class PostController {
   constructor(
-    private readonly newPostService: NewPostService,
-    private readonly getPostsService: GetPostsService,
+    private readonly postService: PostService,
     private readonly voteService: VoteService,
-    private readonly editPostService: EditPostService,
-    private readonly deletePostService: DeletePostService,
   ) {}
 
   // GET /  (Get all Posts)
   @Get(':post_id')
   getPosts(@Param('post_id') post_id: string): any {
-    return this.getPostsService.getPosts(post_id);
+    return this.postService.getPostById(post_id);
   }
 
   // POST /new  (New Post)
@@ -41,7 +35,7 @@ export class PostController {
     @Body('title') title: string,
     @Body('content') content: string,
   ): any {
-    return this.newPostService.newPost(req.user.id, title, content);
+    return this.postService.createPost(req.user.id, title, content);
   }
 
   // POST /vote (Up/Down-vote)
@@ -62,14 +56,15 @@ export class PostController {
     @Body('post_id') post_id,
     @Body('title') title,
     @Body('content') content,
+    @Request() req,
   ): any {
-    return this.editPostService.editPost(post_id, title, content);
+    return this.postService.editPost(post_id, req.user.id, title, content);
   }
 
   // DELETE /del
   @UseGuards(JwtAuthGuard, UserGuard)
   @Delete('del')
-  deletePost(@Body('post_id') post_id: string): any {
-    return this.deletePostService.deletePost(post_id);
+  deletePost(@Body('post_id') post_id: string, @Request() req): any {
+    return this.postService.deletePost(post_id, req.user.id);
   }
 }

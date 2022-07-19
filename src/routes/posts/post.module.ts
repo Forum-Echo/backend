@@ -1,23 +1,18 @@
 import { Module } from '@nestjs/common';
-import { NewPostService } from './services/newpost.service';
 import { PostController } from './post.controller';
-import { GetPostsService } from './services/getposts.service';
 import { VoteService } from './services/vote.service';
-import { EditPostService } from './services/editpost.service';
-import { DeletePostService } from './services/deletepost.service';
 import { UserStrategy } from '../auth/strategy/user.strategy';
 import { UserModule } from '../users/user.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { PostSchema } from './models/post.model';
+import { PostService } from './services/post.service';
 
 @Module({
-  imports: [UserModule],
-  providers: [
-    UserStrategy,
-    NewPostService,
-    GetPostsService,
-    VoteService,
-    EditPostService,
-    DeletePostService,
+  imports: [
+    UserModule,
+    MongooseModule.forFeature([{ name: 'Post', schema: PostSchema }]),
   ],
+  providers: [PostService, UserStrategy, VoteService],
   controllers: [PostController],
 })
 export class PostModule {}
