@@ -6,9 +6,10 @@ import { VoteService } from './services/vote.service';
 import { EditPostService } from './services/editpost.service';
 import { DeletePostService } from './services/deletepost.service';
 import { UserStrategy } from '../auth/strategy/user.strategy';
+import { UserModule } from '../users/user.module';
 
 @Module({
-  imports: [],
+  imports: [UserModule],
   providers: [
     UserStrategy,
     NewPostService,

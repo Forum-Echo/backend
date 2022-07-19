@@ -1,22 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { find } from '../../../utils/database/database.providers';
 import { ObjectId } from 'mongodb';
+import { UserService } from '../../users/services/user.service';
 
 @Injectable()
 export class UserStrategy {
-  async validateRequest(request: any): Promise<any> {
-    const dbResponse = await find(
-      { _id: new ObjectId(request.user.id) },
-      'users',
-      'users',
-    );
+  constructor(private userService: UserService) {}
 
-    if (!dbResponse[0]) {
+  async validateRequest(request: any): Promise<any> {
+    const user = await this.userService.getUserById(request.user.id);
+
+    if (!user) {
       return false;
     }
 
-    return (
-      dbResponse[0]._id.toString() === new ObjectId(request.user.id).toString()
-    );
+    return user.id.toString() === new ObjectId(request.user.id).toString();
   }
 }
