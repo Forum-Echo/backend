@@ -1,50 +1,45 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as crypto from 'crypto';
-import { find, insert } from '../../../utils/database/database.providers';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User } from '../models/user.model';
+import { UserService } from './user.service';
 
 @Injectable()
 export class RegisterService {
+  constructor(
+    @InjectModel('User') private readonly userModel: Model<User>,
+    private userService: UserService,
+  ) {}
   async register(
     username: string,
     password: string,
     email: string,
   ): Promise<any> {
-    if (username === undefined) {
-      new BadRequestException();
-      return;
+    if (!username || !password || !email) {
+      throw new BadRequestException();
     }
 
-    let dbResponse;
+    const dbResponse = await this.userService.getUserByName(username);
 
-    dbResponse = await find({ username: username }, 'users', 'users');
-
-    if (dbResponse[0] !== undefined) {
-      return {
-        error: 'user_already_exists',
-      };
-    }
-
-    dbResponse = await find({ email: email }, 'users', 'users');
-
-    if (dbResponse[0] !== undefined) {
-      return {
-        error: 'email_already_exists',
-      };
+    if (!dbResponse.error) {
+      return { error: 'user_already_exists' };
     }
 
     const hashedPassword = this.hash(password);
 
-    await insert(
-      {
-        username: `${username}`,
-        password: `${hashedPassword}`,
-        email: `${email}`,
-      },
-      'users',
-      'users',
-    );
+    const newUser = new this.userModel({
+      username: username,
+      email: email,
+      password: hashedPassword,
+      authority: 3,
+      permissions: ['create_post', 'delete_own_post', 'vote'],
+      role: 'user',
+    });
 
-    return { success: true };
+    const result = await newUser.save();
+
+    return { success: result.id };
   }
 
   hash(password) {

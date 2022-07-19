@@ -13,19 +13,15 @@ import { AuthService } from '../auth/auth.service';
 import { RegisterService } from './services/register.service';
 import { LocalAuthGuard } from '../auth/guard/local.guard';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
-import { EditUserService } from './services/edituser.service';
-import { GetUserService } from './services/getuser.service';
+import { UserService } from './services/user.service';
 import { UserGuard } from '../auth/guard/user.guard';
-import { DelUserService } from './services/deluser.service';
 
 @Controller('user')
 export class UserController {
   constructor(
     private readonly authService: AuthService,
     private readonly registerService: RegisterService,
-    private readonly editUserService: EditUserService,
-    private readonly getUserService: GetUserService,
-    private readonly delUserService: DelUserService,
+    private readonly userService: UserService,
   ) {}
 
   // POST /register
@@ -52,22 +48,20 @@ export class UserController {
     @Body('new_password') new_password: string,
     @Body('new_username') new_username: string,
   ): any {
-    return this.editUserService.editUser(
-      req.user.id,
-      new_password,
-      new_username,
-    );
+    return this.userService.editUser(req.user.id, new_password, new_username);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':user_id')
-  getUser(@Param('user_id') user_id: string): any {
-    return this.getUserService.getUser(user_id);
+  async getUser(@Param('user_id') user_id: string): Promise<any> {
+    const user = await this.userService.getUserById(user_id);
+
+    return { username: user.username, email: user.email, role: user.role };
   }
 
-  @UseGuards(UserGuard)
+  @UseGuards(JwtAuthGuard, UserGuard)
   @Delete('')
   async deleteUser(@Request() req: any) {
-    return this.delUserService.deleteUser(req.user.id);
+    return this.userService.deleteUser(req.user.id);
   }
 }
