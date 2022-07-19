@@ -1,8 +1,8 @@
 import { MongoClient } from 'mongodb';
+import { databaseUrl } from '../../environment/environment';
 
-// const db_url = `mongodb+srv://admin:TWBYJ6KA7o5WZGFx@forumecho.pgc3t9e.mongodb.net/?retryWrites=true&w=majority`;
-const db_url = 'mongodb://localhost:27017';
-const client = new MongoClient(db_url);
+// const databaseUrl = 'mongodb://localhost:27017';
+const client = new MongoClient(databaseUrl);
 
 client.connect();
 
