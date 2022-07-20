@@ -1,73 +1,100 @@
-import { Injectable } from '@nestjs/common';
-import { find, update } from '../../../utils/database/database.providers';
-import { ObjectId } from 'mongodb';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Post } from '../models/post.model';
+import { PostService } from './post.service';
 
 @Injectable()
 export class VoteService {
-  async vote(type: boolean, post_id: string, author_id: string) {
-    const dbResponse = await find(
-      { _id: new ObjectId(post_id) },
-      'posts',
-      'posts',
-    );
+  constructor(
+    private postService: PostService,
+    @InjectModel('Post') private readonly postModel: Model<Post>,
+  ) {}
 
-    if (!dbResponse[0]) {
-      return { error: 'post_not_found' };
+  async vote(type: boolean, post_id: string, author_id: string) {
+    if (!post_id || !author_id) {
+      throw new BadRequestException();
+    }
+
+    const post = await this.postService.getPostById(post_id);
+
+    if (!post) {
+      throw new NotFoundException();
     }
 
     if (type) {
-      return await this.upvote(post_id, dbResponse[0].liked_by, author_id);
-    } else {
-      return await this.downVote(post_id, dbResponse[0].disliked_by, author_id);
+      return await this.upvote(post);
     }
+
+    return await this.downVote(post);
   }
 
-  async upvote(post_id: string, upvotes: string[], author_id: string) {
-    let flag = 0;
+  async upvote(post) {
+    const upvotes = post.likedBy;
+    const downvotes = post.dislikedBy;
 
+    let flag = 0;
     for (let i = 0; i < upvotes.length; i++) {
-      if (upvotes[i] === author_id) {
+      if (upvotes[i] === post.authorId) {
         upvotes.splice(i, 1);
         flag = 1;
         break;
       }
     }
 
-    if (flag === 0) {
-      upvotes.push(author_id);
+    for (let i = 0; i < downvotes.length; i++) {
+      if (downvotes[i] === post.authorId) {
+        downvotes.splice(i, 1);
+        break;
+      }
     }
 
-    await update(
-      { _id: new ObjectId(post_id) },
-      { $set: { liked_by: upvotes } },
-      'posts',
-      'posts',
-    );
+    if (flag === 0) {
+      upvotes.push(post.authorId);
+    }
+
+    post.likedBy = upvotes;
+    post.dislikedBy = downvotes;
+
+    post.save();
 
     return { liked_by: upvotes };
   }
 
-  async downVote(post_id: string, downvotes: string[], author_id: string) {
+  async downVote(post) {
+    const downvotes = post.dislikedBy;
+    const upvotes = post.likedBy;
+
     let flag = 0;
 
     for (let i = 0; i < downvotes.length; i++) {
-      if (downvotes[i] === author_id) {
+      if (downvotes[i] === post.authorId) {
         downvotes.splice(i, 1);
         flag = 1;
         break;
       }
     }
 
-    if (flag === 0) {
-      downvotes.push(author_id);
+    for (let i = 0; i < upvotes.length; i++) {
+      if (upvotes[i] === post.authorId) {
+        upvotes.splice(i, 1);
+        break;
+      }
     }
 
-    await update(
-      { _id: new ObjectId(post_id) },
-      { $set: { disliked_by: downvotes } },
-      'posts',
-      'posts',
-    );
+    if (flag === 0) {
+      downvotes.push(post.authorId);
+    }
+
+    post.dislikedBy = downvotes;
+    post.likedBy = upvotes;
+
+    await post.save();
+
     return { disliked_by: downvotes };
   }
 }

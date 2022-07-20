@@ -15,7 +15,7 @@ export interface Post {
   content: string;
   authorId: string;
   likedBy: string[];
-  dislikedBy: string;
+  dislikedBy: string[];
   created: Date;
   updated: Date | null;
 }
