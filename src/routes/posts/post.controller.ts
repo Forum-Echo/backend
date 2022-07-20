@@ -21,10 +21,16 @@ export class PostController {
     private readonly voteService: VoteService,
   ) {}
 
-  // GET /  (Get all Posts)
-  @Get(':post_id')
+  // GET /:post_id  (Get a specific Posts)
+  @Get('id/:post_id')
   getPosts(@Param('post_id') post_id: string): any {
     return this.postService.getPostById(post_id);
+  }
+
+  // GET /all (Get all posts)
+  @Get('all')
+  getAllPosts(): any {
+    return this.postService.getAllPosts();
   }
 
   // POST /new  (New Post)
@@ -38,7 +44,7 @@ export class PostController {
     return this.postService.createPost(req.user.id, title, content);
   }
 
-  // POST /vote (Up/Down-vote)
+  // PATCH /vote (Up/Down-vote)
   @UseGuards(JwtAuthGuard, UserGuard)
   @Patch('vote')
   upvote(
