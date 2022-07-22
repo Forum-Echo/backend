@@ -17,6 +17,7 @@ import { UserService } from './services/user.service';
 import { UserGuard } from '../auth/guard/user.guard';
 import { ThrottlerGuard } from '@nestjs/throttler';
 
+@UseGuards(ThrottlerGuard)
 @Controller('user')
 export class UserController {
   constructor(
@@ -36,7 +37,7 @@ export class UserController {
   }
 
   // POST /login
-  @UseGuards(LocalAuthGuard, ThrottlerGuard)
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Request() req): any {
     return this.authService.login(req.user);

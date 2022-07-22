@@ -16,7 +16,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     AdminModule,
     MongooseModule.forRoot(databaseUrl),
     ThrottlerModule.forRoot({
-      ttl: 600,
+      ttl: 60,
       limit: 10,
     }),
   ],

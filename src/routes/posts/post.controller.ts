@@ -13,7 +13,9 @@ import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 import { VoteService } from './services/vote.service';
 import { UserGuard } from '../auth/guard/user.guard';
 import { PostService } from './services/post.service';
+import { SkipThrottle, ThrottlerGuard } from '@nestjs/throttler';
 
+@UseGuards(ThrottlerGuard)
 @Controller('post')
 export class PostController {
   constructor(
@@ -22,12 +24,14 @@ export class PostController {
   ) {}
 
   // GET /:post_id  (Get a specific Posts)
+  @SkipThrottle()
   @Get('id/:post_id')
   getPosts(@Param('post_id') post_id: string): any {
     return this.postService.getPostById(post_id);
   }
 
   // GET /all (Get all posts)
+  @SkipThrottle()
   @Get('all')
   getAllPosts(): any {
     return this.postService.getAllPosts();
