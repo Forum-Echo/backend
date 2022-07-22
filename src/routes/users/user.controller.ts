@@ -15,6 +15,7 @@ import { LocalAuthGuard } from '../auth/guard/local.guard';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 import { UserService } from './services/user.service';
 import { UserGuard } from '../auth/guard/user.guard';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('user')
 export class UserController {
@@ -35,7 +36,7 @@ export class UserController {
   }
 
   // POST /login
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalAuthGuard, ThrottlerGuard)
   @Post('login')
   login(@Request() req): any {
     return this.authService.login(req.user);

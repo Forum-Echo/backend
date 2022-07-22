@@ -28,6 +28,7 @@
     "@nestjs/mongoose": "^9.2.0",
     "@nestjs/passport": "^8.2.2",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/throttler": "^3.0.0",
     "bcrypt": "^5.0.1",
     "crypto": "^1.0.1",
     "jsonwebtoken": "^8.5.1",

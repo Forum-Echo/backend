@@ -1,15 +1,15 @@
 import { Body, Controller, Delete, UseGuards } from '@nestjs/common';
-import { DelPostService } from './services/delpost.service';
+import { AdminService } from './services/admin.service';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 
 @Controller('admin')
 export class AdminController {
-  constructor(private readonly delPostService: DelPostService) {}
+  constructor(private readonly adminService: AdminService) {}
 
   // DELETE /delpost
   @UseGuards(JwtAuthGuard)
   @Delete('delpost')
   deletePost(@Body('post_id') post_id): any {
-    return this.delPostService.deletePost(post_id);
+    return this.adminService.deletePost(post_id);
   }
 }
