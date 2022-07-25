@@ -53,10 +53,10 @@ export class UserController {
     return this.userService.editUser(req.user.id, new_password, new_username);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get(':user_id')
-  async getUser(@Param('user_id') user_id: string): Promise<any> {
-    const user = await this.userService.getUserById(user_id);
+  @UseGuards(JwtAuthGuard, UserGuard)
+  @Get('get')
+  async getUser(@Request() req: any): Promise<any> {
+    const user = await this.userService.getUserById(req.user.id);
 
     return { username: user.username, email: user.email, role: user.role };
   }
