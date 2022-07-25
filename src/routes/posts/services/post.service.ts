@@ -7,6 +7,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Post } from '../models/post.model';
+import { threadId } from 'worker_threads';
 
 interface Return {
   success: object | string | object[];
@@ -30,7 +31,11 @@ export class PostService {
     content: string,
   ): Promise<Return> {
     if (!id || !title || !content) {
-      throw new BadRequestException();
+      throw new BadRequestException('Wrong Body');
+    }
+
+    if (id.length !== 24 || title.length > 24 || content.length > 32768) {
+      throw new BadRequestException('Body too long');
     }
 
     const newPost = new this.postModel({
@@ -61,6 +66,14 @@ export class PostService {
   }
 
   async deletePost(post_id: string, authorId: string): Promise<any> {
+    if (!post_id || !authorId) {
+      throw new BadRequestException('Wrong Body');
+    }
+
+    if (post_id.length !== 24 || authorId.length > 24) {
+      throw new BadRequestException('Body too long');
+    }
+
     const post = await this.getPostById(post_id);
     if (!post) {
       throw new NotFoundException();
@@ -80,6 +93,19 @@ export class PostService {
     title: string,
     content: string,
   ): Promise<any> {
+    if (!post_id || !authorId || !title || !content) {
+      throw new BadRequestException('Wrong Body');
+    }
+
+    if (
+      post_id.length !== 24 ||
+      authorId.length !== 24 ||
+      title.length > 24 ||
+      content.length > 32768
+    ) {
+      throw new BadRequestException('Body too long');
+    }
+
     const post = await this.getPostById(post_id);
 
     if (!post) {

@@ -73,8 +73,8 @@ export class PostController {
 
   // DELETE /del
   @UseGuards(JwtAuthGuard, UserGuard)
-  @Delete('del')
-  deletePost(@Body('post_id') post_id: string, @Request() req): any {
+  @Delete('del/:post_id')
+  deletePost(@Param('post_id') post_id: string, @Request() req): any {
     return this.postService.deletePost(post_id, req.user.id);
   }
 }

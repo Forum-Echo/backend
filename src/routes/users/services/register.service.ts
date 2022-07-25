@@ -17,7 +17,11 @@ export class RegisterService {
     email: string,
   ): Promise<any> {
     if (!username || !password || !email) {
-      throw new BadRequestException();
+      throw new BadRequestException('Wrong Body');
+    }
+
+    if (username.length > 24) {
+      throw new BadRequestException('Too long Body')
     }
 
     const dbResponse = await this.userService.getUserByName(username);
