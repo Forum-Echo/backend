@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
   Patch,
   Post,
   Request,
@@ -43,6 +42,7 @@ export class UserController {
     return this.authService.login(req.user);
   }
 
+  // PATCH /edit
   @UseGuards(JwtAuthGuard, UserGuard)
   @Patch('edit')
   edit(
@@ -53,6 +53,7 @@ export class UserController {
     return this.userService.editUser(req.user.id, new_password, new_username);
   }
 
+  // GET /get
   @UseGuards(JwtAuthGuard, UserGuard)
   @Get('get')
   async getUser(@Request() req: any): Promise<any> {

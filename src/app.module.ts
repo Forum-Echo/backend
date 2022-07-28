@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { UserModule } from './routes/users/user.module';
-import { AuthModule } from './routes/auth/auth.module';
+import { UserModule } from './modules/users/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { PostModule } from './routes/posts/post.module';
-import { AdminModule } from './routes/admin/admin.module';
+import { PostModule } from './modules/posts/post.module';
+import { AdminModule } from './modules/admin/admin.module';
 import { databaseUrl } from './environment/environment';
 import { ThrottlerModule } from '@nestjs/throttler';
 
