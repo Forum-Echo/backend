@@ -7,7 +7,6 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Post } from '../models/post.model';
-import { threadId } from 'worker_threads';
 
 interface Return {
   success: object | string | object[];

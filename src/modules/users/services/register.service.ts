@@ -21,7 +21,7 @@ export class RegisterService {
     }
 
     if (username.length > 24) {
-      throw new BadRequestException('Too long Body')
+      throw new BadRequestException('Too long Body');
     }
 
     const dbResponse = await this.userService.getUserByName(username);

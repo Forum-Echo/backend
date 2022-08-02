@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Patch,
   Post,
   Request,
@@ -58,6 +59,13 @@ export class UserController {
   @Get('get')
   async getUser(@Request() req: any): Promise<any> {
     const user = await this.userService.getUserById(req.user.id);
+
+    return { username: user.username, email: user.email, role: user.role };
+  }
+
+  @Get('getuser/:user_id')
+  async getUserById(@Param('user_id') user_id): Promise<any> {
+    const user = await this.userService.getUserById(user_id);
 
     return { username: user.username, email: user.email, role: user.role };
   }
