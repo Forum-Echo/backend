@@ -1,4 +1,5 @@
-src/.env
+src/modules/environment/config/dev.env
+src/modules/environment/config/prod.env
 
 # compiled output
 /dist

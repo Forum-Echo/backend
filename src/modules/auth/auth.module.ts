@@ -6,6 +6,11 @@ import { LocalStrategy } from './strategy/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { UserStrategy } from './strategy/user.strategy';
+import * as dotenv from 'dotenv';
+
+dotenv.config({
+  path: 'src/modules/environment/config/dev.env',
+});
 
 @Module({
   imports: [
@@ -13,7 +18,7 @@ import { UserStrategy } from './strategy/user.strategy';
     forwardRef(() => UserModule),
     PassportModule,
     JwtModule.register({
-      secret: 'SECRET',
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '7d' },
     }),
   ],

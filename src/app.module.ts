@@ -5,8 +5,12 @@ import { AuthModule } from './modules/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PostModule } from './modules/posts/post.module';
 import { AdminModule } from './modules/admin/admin.module';
-import { databaseUrl } from './environment/environment';
 import { ThrottlerModule } from '@nestjs/throttler';
+import * as dotenv from 'dotenv';
+
+dotenv.config({
+  path: 'src/modules/environment/config/dev.env',
+});
 
 @Module({
   imports: [
@@ -14,7 +18,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     AuthModule,
     PostModule,
     AdminModule,
-    MongooseModule.forRoot(databaseUrl),
+    MongooseModule.forRoot(process.env.DB_URL),
     ThrottlerModule.forRoot({
       ttl: 60,
       limit: 30,
