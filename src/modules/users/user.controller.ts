@@ -39,8 +39,16 @@ export class UserController {
   // POST /login
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Request() req): any {
-    return this.authService.login(req.user);
+  async login(@Request() req): Promise<any> {
+    console.log(await this.authService.login(req.user));
+
+    const token = await this.authService.login(req.user);
+    const user_id = await this.userService.getUserByName(req.user.username);
+
+    return {
+      access_token: token,
+      id: user_id._id,
+    };
   }
 
   // PATCH /edit
