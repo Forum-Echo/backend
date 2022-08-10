@@ -40,8 +40,6 @@ export class UserController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req): Promise<any> {
-    console.log(await this.authService.login(req.user));
-
     const token = await this.authService.login(req.user);
     const user_id = await this.userService.getUserByName(req.user.username);
 
