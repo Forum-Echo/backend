@@ -8,10 +8,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './models/user.model';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
     AuthModule,
+    MailModule,
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
   controllers: [UserController],

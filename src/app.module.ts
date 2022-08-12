@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PostModule } from './modules/posts/post.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { MailModule } from './modules/mail/mail.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config({
@@ -18,6 +19,7 @@ dotenv.config({
     AuthModule,
     PostModule,
     AdminModule,
+    MailModule,
     MongooseModule.forRoot(process.env.DB_URL),
     ThrottlerModule.forRoot({
       ttl: 60,

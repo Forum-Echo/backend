@@ -4,12 +4,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../models/user.model';
 import { UserService } from './user.service';
+import { MailService } from '../../mail/services/mail.service';
 
 @Injectable()
 export class RegisterService {
   constructor(
     @InjectModel('User') private readonly userModel: Model<User>,
     private userService: UserService,
+    private mailService: MailService,
   ) {}
   async register(
     username: string,
@@ -42,6 +44,8 @@ export class RegisterService {
     });
 
     const result = await newUser.save();
+
+    //TODO: await this.mailService.sendUserConfirmation(newUser);
 
     return { success: result.id };
   }
