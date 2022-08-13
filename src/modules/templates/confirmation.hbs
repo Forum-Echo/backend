@@ -1,7 +1,59 @@
-<p>Hey {{ name }},</p>
-<p>Please click below to confirm your email</p>
-<p>
-  <a href="{{ url }}">Confirm</a>
-</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmation email</title>
+</head>
+<style>
+  * {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  }
+  body {
+    margin: 0;
+    font-size: 18px;
+    background-color: #E5E9F0;
+  }
+  .header {
+    width: 100vw;
+    margin:0;
+    background-color: #003399;
+    color:  #FFCC00;
+    padding: 1rem;
+    display: flex;
+  }
+  #FE-logo {
+    width: 10rem;
+  }
+  .email-content {
+    margin: 0.5rem;
+  }
+  .after-greeting {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+  }
+  .bottom-notice {
+    font-size: 0.8rem;
+    color:#696969;
+  }
+</style>
+<body>
+<div class="header">
+  <img src="https://wwww.forumecho.eu/assets/pictures/FE-logo.png" alt="FE-logo" id="FE-logo"><h1>Forum Echo</h1>
+</div>
+<div class="email-content">
+  <p>Hey {{name}}, thanks for signing up to Forum Echo!</p>
+  <div class="after-greeting">
+    <p>Please click below to confirm your email address:</p>
 
-<p>If you did not request this email you can safely ignore it.</p>
+    <a href="{{url}}">Confirm</a>
+
+    <p class="bottom-notice">{If you did not request this email you can safely ignore it.}</p>
+  </div>
+</div>
+</body>
+</html>
