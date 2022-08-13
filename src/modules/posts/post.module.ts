@@ -6,13 +6,16 @@ import { UserModule } from '../users/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PostSchema } from './models/post.model';
 import { PostService } from './services/post.service';
+import { VerifyStrategy } from '../auth/strategy/verify.strategy';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     UserModule,
     MongooseModule.forFeature([{ name: 'Post', schema: PostSchema }]),
   ],
-  providers: [PostService, UserStrategy, VoteService],
+  providers: [PostService, UserStrategy, VerifyStrategy, VoteService],
   controllers: [PostController],
 })
 export class PostModule {}

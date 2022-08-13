@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { UserStrategy } from './strategy/user.strategy';
 import * as dotenv from 'dotenv';
+import { VerifyStrategy } from './strategy/verify.strategy';
 
 dotenv.config({
   path: 'src/modules/environment/config/dev.env',
@@ -27,7 +28,7 @@ dotenv.config({
     LocalStrategy,
     JwtStrategy,
     UserStrategy,
-    UserStrategy,
+    VerifyStrategy,
   ],
   exports: [AuthService],
 })

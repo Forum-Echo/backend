@@ -9,6 +9,7 @@ import { UserSchema } from './models/user.model';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { MailModule } from '../mail/mail.module';
+import { VerifyStrategy } from '../auth/strategy/verify.strategy';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MailModule } from '../mail/mail.module';
   providers: [
     RegisterService,
     UserService,
+    VerifyStrategy,
     UserStrategy,
     {
       provide: APP_GUARD,

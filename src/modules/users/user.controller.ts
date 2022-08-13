@@ -16,6 +16,7 @@ import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 import { UserService } from './services/user.service';
 import { UserGuard } from '../auth/guard/user.guard';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { VerifyGuard } from '../auth/guard/verify.guard';
 
 @UseGuards(ThrottlerGuard)
 @Controller('user')
@@ -37,7 +38,7 @@ export class UserController {
   }
 
   // POST /login
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalAuthGuard, VerifyGuard)
   @Post('login')
   async login(@Request() req): Promise<any> {
     const token = await this.authService.login(req.user);
@@ -50,7 +51,7 @@ export class UserController {
   }
 
   // PATCH /edit
-  @UseGuards(JwtAuthGuard, UserGuard)
+  @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
   @Patch('edit')
   edit(
     @Request() req: any,
@@ -61,7 +62,7 @@ export class UserController {
   }
 
   // GET /get
-  @UseGuards(JwtAuthGuard, UserGuard)
+  @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
   @Get('get')
   async getUser(@Request() req: any): Promise<any> {
     const user = await this.userService.getUserById(req.user.id);
@@ -76,13 +77,13 @@ export class UserController {
     return { username: user.username, email: user.email, role: user.role };
   }
 
-  @UseGuards(JwtAuthGuard, UserGuard)
+  @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
   @Delete('')
   async deleteUser(@Request() req: any) {
     return this.userService.deleteUser(req.user.id);
   }
 
-  @Patch('verify/:token')
+  @Get('verify/:token')
   async verifyUser(@Param('token') token): Promise<any> {
     return this.userService.verifyUser(token);
   }

@@ -22,7 +22,7 @@ export class UserService {
     const user = await this.userModel.findOne({ username: username });
 
     if (!user) {
-      throw new NotFoundException('user_not_found');
+      return { error: 'user_not_found' };
     }
 
     return user;
@@ -39,7 +39,7 @@ export class UserService {
       throw new NotFoundException('user_not_found');
     }
 
-    console.log(token);
+    return user;
   }
 
   async deleteUser(user_id: string): Promise<any> {

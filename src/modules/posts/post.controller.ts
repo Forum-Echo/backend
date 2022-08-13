@@ -14,6 +14,7 @@ import { VoteService } from './services/vote.service';
 import { UserGuard } from '../auth/guard/user.guard';
 import { PostService } from './services/post.service';
 import { SkipThrottle, ThrottlerGuard } from '@nestjs/throttler';
+import { VerifyGuard } from '../auth/guard/verify.guard';
 
 @UseGuards(ThrottlerGuard)
 @Controller('post')
@@ -38,7 +39,7 @@ export class PostController {
   }
 
   // POST /new  (New Post)
-  @UseGuards(JwtAuthGuard, UserGuard)
+  @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
   @Post('new')
   newPost(
     @Request() req,
@@ -49,7 +50,7 @@ export class PostController {
   }
 
   // PATCH /vote (Up/Down-vote)
-  @UseGuards(JwtAuthGuard, UserGuard)
+  @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
   @Patch('vote')
   upvote(
     @Request() req,
@@ -60,7 +61,7 @@ export class PostController {
   }
 
   // PATCH /edit (Edit Post)
-  @UseGuards(JwtAuthGuard, UserGuard)
+  @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
   @Patch('edit')
   editPost(
     @Body('post_id') post_id,
@@ -72,7 +73,7 @@ export class PostController {
   }
 
   // DELETE /del
-  @UseGuards(JwtAuthGuard, UserGuard)
+  @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
   @Delete('del/:post_id')
   deletePost(@Param('post_id') post_id: string, @Request() req): any {
     return this.postService.deletePost(post_id, req.user.id);
