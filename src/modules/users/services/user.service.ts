@@ -22,10 +22,24 @@ export class UserService {
     const user = await this.userModel.findOne({ username: username });
 
     if (!user) {
-      return { error: 'user_not_found' };
+      throw new NotFoundException('user_not_found');
     }
 
     return user;
+  }
+
+  async getUserByToken(token: string): Promise<any> {
+    if (!token) {
+      throw new NotFoundException('user_not_found');
+    }
+
+    const user = await this.userModel.findOne({ role: token });
+
+    if (!user) {
+      throw new NotFoundException('user_not_found');
+    }
+
+    console.log(token);
   }
 
   async deleteUser(user_id: string): Promise<any> {
@@ -57,6 +71,20 @@ export class UserService {
     user.save();
 
     return { success: true };
+  }
+
+  async verifyUser(token: string): Promise<any> {
+    const user = await this.getUserByToken(token);
+
+    if (!user) {
+      throw new NotFoundException('user_not_found');
+    }
+
+    user.role = 'user';
+
+    user.save();
+
+    return { user: user };
   }
 
   hash(password) {

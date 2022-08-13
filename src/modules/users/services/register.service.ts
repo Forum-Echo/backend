@@ -13,6 +13,18 @@ export class RegisterService {
     private userService: UserService,
     private mailService: MailService,
   ) {}
+
+  generateId(length: number): any {
+    let result = '';
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+
   async register(
     username: string,
     password: string,
@@ -40,12 +52,12 @@ export class RegisterService {
       password: hashedPassword,
       authority: 3,
       permissions: ['create_post', 'delete_own_post', 'vote'],
-      role: 'user',
+      role: this.generateId(12),
     });
 
     const result = await newUser.save();
 
-    //TODO: await this.mailService.sendUserConfirmation(newUser);
+    await this.mailService.sendUserConfirmation(newUser);
 
     return { success: result.id };
   }

@@ -81,4 +81,9 @@ export class UserController {
   async deleteUser(@Request() req: any) {
     return this.userService.deleteUser(req.user.id);
   }
+
+  @Patch('verify/:token')
+  async verifyUser(@Param('token') token): Promise<any> {
+    return this.userService.verifyUser(token);
+  }
 }

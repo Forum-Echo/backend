@@ -12,7 +12,7 @@ export class MailService {
   constructor(private mailerService: MailerService) {}
 
   async sendUserConfirmation(user: User): Promise<any> {
-    const url = `${process.env.DOMAIN}login`;
+    const url = `${process.env.DOMAIN}login/${user.role}`;
 
     await this.mailerService.sendMail({
       to: user.email,

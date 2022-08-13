@@ -6,7 +6,7 @@ export const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   authority: { type: Number, required: true },
   permissions: { type: Array, required: true },
-  role: { type: String, required: true },
+  role: { type: String || Object, required: true },
 });
 
 export interface User {
