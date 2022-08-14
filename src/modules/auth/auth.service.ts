@@ -34,7 +34,7 @@ export class AuthService {
 
   hash(password) {
     return crypto
-      .createHash('sha256')
+      .createHash('sha512')
       .update(JSON.stringify(password))
       .digest('hex');
   }

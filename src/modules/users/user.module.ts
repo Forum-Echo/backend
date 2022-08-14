@@ -10,12 +10,16 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { MailModule } from '../mail/mail.module';
 import { VerifyStrategy } from '../auth/strategy/verify.strategy';
+import { SaltSchema } from './models/salt.model';
 
 @Module({
   imports: [
     AuthModule,
     MailModule,
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: 'User', schema: UserSchema },
+      { name: 'Salt', schema: SaltSchema },
+    ]),
   ],
   controllers: [UserController],
   providers: [
