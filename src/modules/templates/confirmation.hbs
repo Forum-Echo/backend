@@ -15,7 +15,7 @@
     font-size: 18px;
     background-color: #E5E9F0;
   }
-  .header {
+  header {
     width: 100vw;
     margin:0;
     background-color: #003399;
@@ -40,11 +40,22 @@
     font-size: 0.8rem;
     color:#696969;
   }
+
+  .title {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 20px;
+  }
 </style>
 <body>
-<div class="header">
-  <img src="https://wwww.forumecho.eu/assets/pictures/FE-logo.png" alt="FE-logo" id="FE-logo"><h1>Forum Echo</h1>
-</div>
+<header>
+  <!--<img src="https://wwww.forumecho.eu/assets/pictures/FE-logo.png" alt="FE-logo" id="FE-logo"><h1>Forum Echo</h1>-->
+  <img
+    src="https://cdn.discordapp.com/attachments/931996388617781269/1008434480282865664/FE-logo.png"
+    alt="FE-logo" id="FE-logo"
+  >
+  <h1 class='title'>Forum Echo</h1>
+</header>
 <div class="email-content">
   <p>Hey {{name}}, thanks for signing up to Forum Echo!</p>
   <div class="after-greeting">
