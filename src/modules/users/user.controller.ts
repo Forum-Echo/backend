@@ -42,11 +42,12 @@ export class UserController {
   @Post('login')
   async login(@Request() req): Promise<any> {
     const token = await this.authService.login(req.user);
-    const user_id = await this.userService.getUserByName(req.user.username);
+    const user = await this.userService.getUserByName(req.user.username);
 
     return {
       access_token: token,
-      id: user_id._id,
+      id: user._id,
+      role: user.role,
     };
   }
 
