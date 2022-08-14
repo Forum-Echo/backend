@@ -3,10 +3,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../models/user.model';
 import * as crypto from 'crypto';
+import { Salt } from '../models/salt.model';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+  constructor(
+    @InjectModel('User') private readonly userModel: Model<User>,
+    @InjectModel('Salt') private readonly saltModel: Model<Salt>,
+  ) {}
 
   async getUserById(user_id: string): Promise<any> {
     const user = await this.userModel.findById(user_id);
@@ -85,6 +89,12 @@ export class UserService {
     user.save();
 
     return { user: user };
+  }
+
+  async getSalt(userId: string): Promise<any> {
+    const salt = await this.saltModel.findOne({ userId });
+
+    return salt.salt;
   }
 
   hash(password) {

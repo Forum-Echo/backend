@@ -10,10 +10,16 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
   async validateUser(username: string, password: string): Promise<any> {
+    // get user from database
     const user = await this.userService.getUserByName(username);
 
-    const hashedPassword = this.hash(password);
+    // get salt from database
+    const salt = await this.userService.getSalt(user._id);
 
+    // Generate sha512 hashed password
+    const hashedPassword = this.hash(password + salt);
+
+    // check if passwords match
     if (user && user.password === hashedPassword) {
       return user;
     }
@@ -34,7 +40,7 @@ export class AuthService {
 
   hash(password) {
     return crypto
-      .createHash('sha256')
+      .createHash('sha512')
       .update(JSON.stringify(password))
       .digest('hex');
   }

@@ -1,35 +1,31 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import * as crypto from 'crypto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../models/user.model';
 import { UserService } from './user.service';
 import { MailService } from '../../mail/services/mail.service';
+import { Salt } from '../models/salt.model';
 
 @Injectable()
 export class RegisterService {
   constructor(
     @InjectModel('User') private readonly userModel: Model<User>,
+    @InjectModel('Salt') private readonly saltModel: Model<Salt>,
     private userService: UserService,
     private mailService: MailService,
   ) {}
-
-  generateId(length: number): any {
-    let result = '';
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  }
 
   async register(
     username: string,
     password: string,
     email: string,
   ): Promise<any> {
+    // Check Body
     if (!username || !password || !email) {
       throw new BadRequestException('Wrong Body');
     }
@@ -38,14 +34,20 @@ export class RegisterService {
       throw new BadRequestException('Too long Body');
     }
 
+    // Check for existing user
     const dbResponse = await this.userService.getUserByName(username);
 
     if (!dbResponse.error) {
-      return { error: 'user_already_exists' };
+      throw new NotFoundException('user_already_exists');
     }
 
-    const hashedPassword = this.hash(password);
+    // salt password
+    const salt = this.salt(password);
 
+    // hash salted password
+    const hashedPassword = this.hash(salt);
+
+    // Creating the user
     const newUser = new this.userModel({
       username: username,
       email: email,
@@ -57,15 +59,41 @@ export class RegisterService {
 
     const result = await newUser.save();
 
+    // Creating the salt entry
+    const newSalt = new this.saltModel({
+      userId: result.id,
+      salt: salt.slice(password.length),
+    });
+    await newSalt.save();
+
+    // Sending Mail
     await this.mailService.sendUserConfirmation(newUser);
 
     return { success: result.id };
   }
 
-  hash(password) {
+  // returns a password with an additional 16 random letters
+  salt(password: string) {
+    return password + this.generateId(16);
+  }
+
+  // returns a sha512 hash
+  hash(password: string) {
     return crypto
-      .createHash('sha256')
+      .createHash('sha512')
       .update(JSON.stringify(password))
       .digest('hex');
+  }
+
+  // Generate a random string with a specific length
+  generateId(length: number): any {
+    let result = '';
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
   }
 }
