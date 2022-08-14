@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
 import { UserService } from '../users/services/user.service';
+import { MailService } from '../mail/services/mail.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private mailService: MailService,
   ) {}
   async validateUser(username: string, password: string): Promise<any> {
     // get user from database
@@ -35,6 +37,10 @@ export class AuthService {
       role: user.role,
     };
 
+    // Send login information email
+    await this.mailService.sendUserInformation(user);
+
+    // Sign JsonWebToken
     return this.jwtService.sign(payload);
   }
 

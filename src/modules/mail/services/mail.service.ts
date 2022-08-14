@@ -11,7 +11,7 @@ dotenv.config({
 export class MailService {
   constructor(private mailerService: MailerService) {}
 
-  async sendUserConfirmation(user: User): Promise<any> {
+  async sendUserConfirmation(user: User): Promise<void> {
     const url = `${process.env.DOMAIN}login/${user.role}`;
 
     await this.mailerService.sendMail({
@@ -21,6 +21,17 @@ export class MailService {
       context: {
         name: user.username,
         url,
+      },
+    });
+  }
+
+  async sendUserInformation(user: User): Promise<void> {
+    await this.mailerService.sendMail({
+      to: user.email,
+      subject: 'Login to your ForumEcho account',
+      template: './information.hbs',
+      context: {
+        name: user.username,
       },
     });
   }

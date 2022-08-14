@@ -8,6 +8,7 @@ import { JwtStrategy } from './strategy/jwt.strategy';
 import { UserStrategy } from './strategy/user.strategy';
 import * as dotenv from 'dotenv';
 import { VerifyStrategy } from './strategy/verify.strategy';
+import { MailModule } from '../mail/mail.module';
 
 dotenv.config({
   path: 'src/modules/environment/config/dev.env',
@@ -18,6 +19,7 @@ dotenv.config({
     AuthModule,
     forwardRef(() => UserModule),
     PassportModule,
+    MailModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '7d' },
