@@ -55,6 +55,8 @@ export class UserService {
 
     this.userModel.findByIdAndDelete(user_id);
 
+    this.saltModel.findOneAndDelete({ userId: user_id });
+
     return { success: true };
   }
 
