@@ -94,12 +94,16 @@ export class UserService {
   async getSalt(userId: string): Promise<any> {
     const salt = await this.saltModel.findOne({ userId });
 
+    if (!salt) {
+      throw new NotFoundException('salt_not_found');
+    }
+
     return salt.salt;
   }
 
   hash(password) {
     return crypto
-      .createHash('sha256')
+      .createHash('sha512')
       .update(JSON.stringify(password))
       .digest('hex');
   }
