@@ -1,7 +1,7 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -38,7 +38,7 @@ export class RegisterService {
     const dbResponse = await this.userService.getUserByName(username);
 
     if (!dbResponse.error) {
-      throw new NotFoundException('user_already_exists');
+      throw new ConflictException('user_already_exists');
     }
 
     // salt password
