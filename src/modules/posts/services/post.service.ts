@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -33,8 +34,12 @@ export class PostService {
       throw new BadRequestException('Wrong Body');
     }
 
-    if (id.length !== 24 || title.length > 24 || content.length > 32768) {
-      throw new BadRequestException('Body too long');
+    if (id.length !== 24 || title.length > 24) {
+      throw new BadRequestException('title_too_long');
+    }
+
+    if (content.length > 32768) {
+      throw new BadRequestException('content_too_long');
     }
 
     const newPost = new this.postModel({
@@ -51,12 +56,12 @@ export class PostService {
 
     posts = await this.postModel.find({ title: newPost.title });
     if (posts[0]) {
-      return { success: 'title_already_used' };
+      throw new ConflictException('title_already_exists');
     }
 
     posts = await this.postModel.find({ content: newPost.content });
     if (posts[0]) {
-      return { success: 'content_already_used' };
+      throw new ConflictException('content_already_exists');
     }
 
     const result = await newPost.save();
