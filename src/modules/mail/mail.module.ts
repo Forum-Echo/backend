@@ -13,10 +13,11 @@ dotenv.config({
   imports: [
     MailerModule.forRoot({
       transport: {
-        host: 'smtp.mailgun.org',
+        host: 'smtp.eu.mailgun.org',
+        port: 587,
         secure: false,
         auth: {
-          user: 'postmaster@sandboxaf04a5d2e77a420e8b153dc410575460.mailgun.org',
+          user: 'postmaster@mail.forumecho.eu',
           pass: process.env.MAIL_PASSWORD,
         },
       },
