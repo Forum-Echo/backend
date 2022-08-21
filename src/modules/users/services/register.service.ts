@@ -30,7 +30,7 @@ export class RegisterService {
       throw new BadRequestException('Wrong Body');
     }
 
-    if (username.length > 24) {
+    if (username.length > 32) {
       throw new BadRequestException('Too long Body');
     }
 
