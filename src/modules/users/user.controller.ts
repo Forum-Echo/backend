@@ -88,4 +88,9 @@ export class UserController {
   async verifyUser(@Body('token') token): Promise<any> {
     return this.userService.verifyUser(token);
   }
+
+  @Get('forget-password/:email')
+  async forgotPassword(@Param('email') email: string): Promise<any> {
+    return this.userService.sendPasswordConfirmation(email);
+  }
 }

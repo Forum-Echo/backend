@@ -35,4 +35,15 @@ export class MailService {
       },
     });
   }
+
+  async sendForgetPassword(user: User): Promise<void> {
+    await this.mailerService.sendMail({
+      to: user.email,
+      subject: 'Password Reset Request',
+      template: './password.hbs',
+      context: {
+        name: user.username,
+      },
+    });
+  }
 }

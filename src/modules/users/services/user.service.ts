@@ -93,6 +93,15 @@ export class UserService {
     return { user: user };
   }
 
+  async sendPasswordConfirmation(email: string): Promise<any> {
+    const user = this.userModel.findOne({ email });
+
+    if (!user) {
+      throw new NotFoundException('user_not_found');
+    }
+    return this.generateId(12);
+  }
+
   async getSalt(userId: string): Promise<any> {
     const salt = await this.saltModel.findOne({ userId });
 
@@ -108,5 +117,17 @@ export class UserService {
       .createHash('sha512')
       .update(JSON.stringify(password))
       .digest('hex');
+  }
+
+  // Generate a random string with a specific length
+  generateId(length: number): any {
+    let result = '';
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
   }
 }
