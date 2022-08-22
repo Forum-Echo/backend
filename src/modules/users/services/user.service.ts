@@ -72,8 +72,10 @@ export class UserService {
     if (!user) {
       throw new NotFoundException('user_not_found');
     }
+    // get salt from database
+    const salt = await this.getSalt(user._id);
 
-    user.password = this.hash(new_password);
+    user.password = this.hash(new_password + salt);
     user.username = new_username;
 
     user.save();
@@ -121,7 +123,10 @@ export class UserService {
       throw new NotFoundException('user_not_found');
     }
 
-    user.password = new_password;
+    // get salt from database
+    const salt = await this.getSalt(user._id);
+
+    user.password = this.hash(new_password + salt);
     user.token = '';
 
     user.save();
