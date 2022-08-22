@@ -114,7 +114,22 @@ export class UserService {
     return { user: user.username };
   }
 
+  async resetPassword(token: string, new_password: string): Promise<any> {
+    const user = await this.getUserByToken(token);
 
+    if (!user) {
+      throw new NotFoundException('user_not_found');
+    }
+
+    user.password = new_password;
+    user.token = '';
+
+    user.save();
+
+    await this.mailService.sendPasswordInfo(user);
+
+    return user;
+  }
 
   async getSalt(userId: string): Promise<any> {
     const salt = await this.saltModel.findOne({ userId });
