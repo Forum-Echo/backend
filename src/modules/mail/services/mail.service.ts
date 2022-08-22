@@ -36,11 +36,25 @@ export class MailService {
     });
   }
 
-  async sendForgetPassword(user: User): Promise<void> {
+  async sendForgetPassword(user: User | any, token: string): Promise<void> {
+    const url = `${process.env.DOMAIN}reset/${token}`;
+
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Password Reset Request',
       template: './password.hbs',
+      context: {
+        url,
+        name: user.username,
+      },
+    });
+  }
+
+  async sendPasswordInfo(user: User): Promise<void> {
+    await this.mailerService.sendMail({
+      to: user.email,
+      subject: 'Password Reset Information',
+      template: './password-info.hbs',
       context: {
         name: user.username,
       },

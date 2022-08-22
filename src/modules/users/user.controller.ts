@@ -93,4 +93,12 @@ export class UserController {
   async forgotPassword(@Param('email') email: string): Promise<any> {
     return this.userService.sendPasswordConfirmation(email);
   }
+
+  @Patch('reset-password')
+  async resetPassword(
+    @Body('token') token: string,
+    @Body('new_password') password: string,
+  ): Promise<any> {
+    return this.userService.resetPassword(token, password);
+  }
 }

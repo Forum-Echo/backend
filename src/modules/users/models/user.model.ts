@@ -7,6 +7,7 @@ export const UserSchema = new mongoose.Schema({
   authority: { type: Number, required: true },
   permissions: { type: Array, required: true },
   role: { type: String || Object, required: true },
+  token: { type: String, required: false },
 });
 
 export interface User {
@@ -16,4 +17,5 @@ export interface User {
   authority: number;
   permissions: string[];
   role: string;
+  token: string | null;
 }
