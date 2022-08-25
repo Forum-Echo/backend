@@ -25,13 +25,7 @@ export class UserService {
   }
 
   async getUserByName(username: string): Promise<any> {
-    const user = await this.userModel.findOne({ username: username });
-
-    if (!user) {
-      return { error: 'user_not_found' };
-    }
-
-    return user;
+    return this.userModel.findOne({ username: username });
   }
 
   async getUserByToken(token: string): Promise<any> {
