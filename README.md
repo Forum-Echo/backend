@@ -1,4 +1,4 @@
-<a><img src="https://cdn.discordapp.com/attachments/931996388617781269/1008434480282865664/FE-logo.png"></a>
+![Forum Echo banner](ForumEcho_banner.png)
 
 # [ForumEcho](https://forumecho.eu/) - Backend
 
