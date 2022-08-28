@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-export const PostSchema = new mongoose.Schema({
+export const CommentSchema = new mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
   authorId: { type: String, required: true },
@@ -8,10 +8,10 @@ export const PostSchema = new mongoose.Schema({
   dislikedBy: { type: Array, required: true },
   created: { type: Date, required: true },
   updated: { type: Date || null },
-  comments: { type: Array, required: true },
+  comments: { type: Array || null, required: true },
 });
 
-export interface Post {
+export interface Comment {
   title: string;
   content: string;
   authorId: string;
@@ -19,5 +19,5 @@ export interface Post {
   dislikedBy: string[];
   created: Date;
   updated: Date | null;
-  comments: string[];
+  comments: Comment[] | null;
 }
