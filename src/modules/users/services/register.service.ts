@@ -37,14 +37,14 @@ export class RegisterService {
     // Check for existing user
     const user: any = await this.userService.getUserByName(username);
 
-    if (!user) {
+    if (user) {
       throw new ConflictException('user_already_exists');
     }
 
     // Check for existing email
     const query: any = await this.userModel.findOne({ email });
 
-    if (!query) {
+    if (query) {
       throw new ConflictException('email_already_exists');
     }
 
