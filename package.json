@@ -38,6 +38,7 @@
     "handlebars": "^4.7.7",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.4",
+    "multer-gridfs-storage": "^5.0.2",
     "nodemailer": "^6.7.8",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",

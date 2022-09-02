@@ -12,6 +12,7 @@ import { MailModule } from '../mail/mail.module';
 import { VerifyStrategy } from '../auth/strategy/verify.strategy';
 import { SaltSchema } from './models/salt.model';
 import { SharpPipe } from './services/pipes/sharp.pipe';
+import { PictureService } from './services/picture.service';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { SharpPipe } from './services/pipes/sharp.pipe';
     VerifyStrategy,
     UserStrategy,
     SharpPipe,
+    PictureService,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,

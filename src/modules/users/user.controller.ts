@@ -21,6 +21,7 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 import { VerifyGuard } from '../auth/guard/verify.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SharpPipe } from './services/pipes/sharp.pipe';
+import { PictureService } from './services/picture.service';
 
 @UseGuards(ThrottlerGuard)
 @Controller('user')
@@ -29,6 +30,7 @@ export class UserController {
     private readonly authService: AuthService,
     private readonly registerService: RegisterService,
     private readonly userService: UserService,
+    private readonly pictureService: PictureService,
   ) {}
 
   // POST /register
@@ -114,7 +116,7 @@ export class UserController {
   // POST /upload
   @Post('upload')
   @UseInterceptors(FileInterceptor('profile-picture'))
-  uploadFile(@UploadedFile(SharpPipe) file: Express.Multer.File): any {
-    return file;
+  uploadFile(@UploadedFile(SharpPipe) file: string): any {
+    return this.pictureService.uploadProfileImage(file);
   }
 }
