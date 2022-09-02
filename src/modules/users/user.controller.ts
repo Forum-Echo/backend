@@ -7,7 +7,9 @@ import {
   Patch,
   Post,
   Request,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { RegisterService } from './services/register.service';
@@ -17,6 +19,8 @@ import { UserService } from './services/user.service';
 import { UserGuard } from '../auth/guard/user.guard';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { VerifyGuard } from '../auth/guard/verify.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { SharpPipe } from './services/pipes/sharp.pipe';
 
 @UseGuards(ThrottlerGuard)
 @Controller('user')
@@ -71,6 +75,7 @@ export class UserController {
     return { username: user.username, email: user.email, role: user.role };
   }
 
+  // GET /getuser/:user_id
   @Get('getuser/:user_id')
   async getUserById(@Param('user_id') user_id): Promise<any> {
     const user = await this.userService.getUserById(user_id);
@@ -78,27 +83,38 @@ export class UserController {
     return { username: user.username, email: user.email, role: user.role };
   }
 
+  // DELETE
   @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
   @Delete('')
   async deleteUser(@Request() req: any) {
     return this.userService.deleteUser(req.user.id);
   }
 
+  // PATCH /verify
   @Patch('verify')
   async verifyUser(@Body('token') token): Promise<any> {
     return this.userService.verifyUser(token);
   }
 
+  // GET forget-password/:email
   @Get('forget-password/:email')
   async forgotPassword(@Param('email') email: string): Promise<any> {
     return this.userService.sendPasswordConfirmation(email);
   }
 
+  // PATCH reset-password
   @Patch('reset-password')
   async resetPassword(
     @Body('token') token: string,
     @Body('new_password') password: string,
   ): Promise<any> {
     return this.userService.resetPassword(token, password);
+  }
+
+  // POST /upload
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('profile-picture'))
+  uploadFile(@UploadedFile(SharpPipe) file: Express.Multer.File): any {
+    return file;
   }
 }

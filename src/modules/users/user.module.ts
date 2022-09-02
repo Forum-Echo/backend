@@ -11,6 +11,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { MailModule } from '../mail/mail.module';
 import { VerifyStrategy } from '../auth/strategy/verify.strategy';
 import { SaltSchema } from './models/salt.model';
+import { SharpPipe } from './services/pipes/sharp.pipe';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { SaltSchema } from './models/salt.model';
     UserService,
     VerifyStrategy,
     UserStrategy,
+    SharpPipe,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
