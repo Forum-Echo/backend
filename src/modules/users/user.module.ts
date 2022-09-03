@@ -13,6 +13,7 @@ import { VerifyStrategy } from '../auth/strategy/verify.strategy';
 import { SaltSchema } from './models/salt.model';
 import { SharpPipe } from './services/pipes/sharp.pipe';
 import { PictureService } from './services/picture.service';
+import { PictureSchema } from './models/picture.model';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { PictureService } from './services/picture.service';
     MongooseModule.forFeature([
       { name: 'User', schema: UserSchema },
       { name: 'Salt', schema: SaltSchema },
+      { name: 'Picture', schema: PictureSchema },
     ]),
   ],
   controllers: [UserController],
