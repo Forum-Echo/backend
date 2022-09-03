@@ -121,6 +121,6 @@ export class UserController {
     @UploadedFile(SharpPipe) file: string,
     @Request() req: any
     ): any {
-    return this.pictureService.uploadProfileImage(file, req.user.id);
+    return this.pictureService.uploadPicture(file, req.user.id);
   }
 }
