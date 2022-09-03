@@ -114,9 +114,13 @@ export class UserController {
   }
 
   // POST /upload
+  @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
   @Post('upload')
   @UseInterceptors(FileInterceptor('profile-picture'))
-  uploadFile(@UploadedFile(SharpPipe) file: string): any {
-    return this.pictureService.uploadProfileImage(file);
+  uploadFile(
+    @UploadedFile(SharpPipe) file: string,
+    @Request() req: any
+    ): any {
+    return this.pictureService.uploadProfileImage(file, req.user.id);
   }
 }

@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
+import { InjectModel } from '@nestjs/mongoose';
+import { Picture } from '../models/picture.model';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class PictureService {
-  uploadProfileImage(imageName: string): any {
-    const file = fs.readFileSync(`./src/modules/users/cache/${imageName}`);
+  constructor(
+    @InjectModel('Picture') private readonly pictureModel: Model<Picture>
+  ) {}
 
-    console.log(file);
+  async getPicture(userId: string): Promise<any> {
+    return await this.pictureModel.findOne({ userId });
   }
 }
