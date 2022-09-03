@@ -120,7 +120,13 @@ export class UserController {
   uploadFile(
     @UploadedFile(SharpPipe) file: string,
     @Request() req: any
-    ): any {
+    ): Promise<any> {
     return this.pictureService.uploadPicture(file, req.user.id);
   }
+
+  // GET /getpicture
+  @Get('getpicture/:userId')
+ async getPicture(@Param('userId') userId: string): Promise<any> {
+  return this.pictureService.getPicture(userId);  
+ }
 }
