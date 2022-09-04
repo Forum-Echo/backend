@@ -3,13 +3,17 @@ import * as fs from 'fs';
 import { InjectModel } from '@nestjs/mongoose';
 import { Picture } from '../models/picture.model';
 import { Model } from 'mongoose';
+import { UserService } from './user.service';
+import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
-export class PictureService {
+export class ProfileService {
   constructor(
-    @InjectModel('Picture') private readonly pictureModel: Model<Picture>
+    @InjectModel('Picture') private readonly pictureModel: Model<Picture>,
+    private readonly userService: UserService,
   ) {}
 
+  // ---- Profile Picture ---- //
   async getPicture(userId: string): Promise<any> {
     return await this.pictureModel.findOne({ userId });
   }
@@ -49,5 +53,19 @@ export class PictureService {
 
     // Return id of file
     return { new: result._id }
+  }
+
+  // ---- Bio ---- //
+  async  editBio(userId: string, content: string): Promise<any> {
+    const user = await this.userService.getUserById(userId);
+
+      if (!user) {
+        throw new NotFoundException('user_not_found');
+      }
+
+      user.bio = content;
+
+      const result = await user.save();
+      return { success: result.bio };
   }
 }

@@ -21,7 +21,7 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 import { VerifyGuard } from '../auth/guard/verify.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SharpPipe } from './services/pipes/sharp.pipe';
-import { PictureService } from './services/picture.service';
+import { ProfileService } from './services/profile.service';
 
 @UseGuards(ThrottlerGuard)
 @Controller('user')
@@ -30,7 +30,7 @@ export class UserController {
     private readonly authService: AuthService,
     private readonly registerService: RegisterService,
     private readonly userService: UserService,
-    private readonly pictureService: PictureService,
+    private readonly profileService: ProfileService,
   ) {}
 
   // POST /register
@@ -113,20 +113,30 @@ export class UserController {
     return this.userService.resetPassword(token, password);
   }
 
-  // POST /upload
+  // POST /profile/upload
   @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
-  @Post('upload')
+  @Post('profile/upload')
   @UseInterceptors(FileInterceptor('profile-picture'))
   uploadFile(
     @UploadedFile(SharpPipe) file: string,
     @Request() req: any
     ): Promise<any> {
-    return this.pictureService.uploadPicture(file, req.user.id);
+    return this.profileService.uploadPicture(file, req.user.id);
   }
 
-  // GET /getpicture
-  @Get('getpicture/:userId')
- async getPicture(@Param('userId') userId: string): Promise<any> {
-  return this.pictureService.getPicture(userId);  
- }
+  // GET /profile/getpicture/:userId
+  @Get('profile/getpicture/:userId')
+  async getPicture(@Param('userId') userId: string): Promise<any> {
+    return this.profileService.getPicture(userId);
+  }
+
+  // POST /profile/bio
+  @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
+  @Patch('profile/bio')
+  async editBio(
+    @Body('userId') userId: string,
+    @Body('content') content: string
+    ): Promise<any> {
+      return this.profileService.editBio(userId, content);
+    }
 }
