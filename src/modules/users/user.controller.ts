@@ -7,9 +7,7 @@ import {
   Patch,
   Post,
   Request,
-  UploadedFile,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { RegisterService } from './services/register.service';
@@ -20,8 +18,8 @@ import { UserGuard } from '../auth/guard/user.guard';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { VerifyGuard } from '../auth/guard/verify.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { SharpPipe } from './services/pipes/sharp.pipe';
-import { ProfileService } from './services/profile.service';
+import { SharpPipe } from './profile/services/pipes/sharp.pipe';
+import { ProfileService } from './profile/services/profile.service';
 
 @UseGuards(ThrottlerGuard)
 @Controller('user')
@@ -30,7 +28,6 @@ export class UserController {
     private readonly authService: AuthService,
     private readonly registerService: RegisterService,
     private readonly userService: UserService,
-    private readonly profileService: ProfileService,
   ) {}
 
   // POST /register
@@ -112,31 +109,4 @@ export class UserController {
   ): Promise<any> {
     return this.userService.resetPassword(token, password);
   }
-
-  // POST /profile/upload
-  @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
-  @Post('profile/upload')
-  @UseInterceptors(FileInterceptor('profile-picture'))
-  uploadFile(
-    @UploadedFile(SharpPipe) file: string,
-    @Request() req: any
-    ): Promise<any> {
-    return this.profileService.uploadPicture(file, req.user.id);
-  }
-
-  // GET /profile/getpicture/:userId
-  @Get('profile/getpicture/:userId')
-  async getPicture(@Param('userId') userId: string): Promise<any> {
-    return this.profileService.getPicture(userId);
-  }
-
-  // POST /profile/bio
-  @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
-  @Patch('profile/bio')
-  async editBio(
-    @Body('userId') userId: string,
-    @Body('content') content: string
-    ): Promise<any> {
-      return this.profileService.editBio(userId, content);
-    }
 }

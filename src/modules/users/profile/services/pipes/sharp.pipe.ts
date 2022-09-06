@@ -13,7 +13,7 @@ export class SharpPipe
     await sharp(image.buffer)
       .resize(1000, 1000)
       .webp({ effort: 3 })
-      .toFile(`./src/modules/users/cache/${filename}`);
+      .toFile(`./src/modules/users/profile/cache/${filename}`);
 
     return filename;
   }

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import { InjectModel } from '@nestjs/mongoose';
-import { Picture } from '../models/picture.model';
+import { Picture } from '../../models/picture.model';
 import { Model } from 'mongoose';
-import { UserService } from './user.service';
+import { UserService } from '../../services/user.service';
 import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class ProfileService {
   async uploadPicture(filename: string, userId: string): Promise<any> {
 
     // Get file from cache
-    const file = fs.readFileSync(`./src/modules/users/cache/${filename}`);
+    const file = fs.readFileSync(`./src/modules/users/profile/cache/${filename}`);
     
     // Delete file from cache
     fs.unlink(`./src/modules/users/cache/${filename}`, (err) => {
