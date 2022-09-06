@@ -11,7 +11,7 @@ export class SharpPipe
     const filename = Date.now() + '-' + originalName + '.webp';
 
     await sharp(image.buffer)
-      .resize(1000, 1000)
+      .resize(10024, 1024)
       .webp({ effort: 3 })
       .toFile(`./src/modules/users/profile/cache/${filename}`);
 

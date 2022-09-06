@@ -17,9 +17,6 @@ import { UserService } from './services/user.service';
 import { UserGuard } from '../auth/guard/user.guard';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { VerifyGuard } from '../auth/guard/verify.guard';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { SharpPipe } from './profile/services/pipes/sharp.pipe';
-import { ProfileService } from './profile/services/profile.service';
 
 @UseGuards(ThrottlerGuard)
 @Controller('user')
@@ -71,7 +68,13 @@ export class UserController {
   async getUser(@Request() req: any): Promise<any> {
     const user = await this.userService.getUserById(req.user.id);
 
-    return { username: user.username, email: user.email, role: user.role };
+    return {
+      username: user.username,
+      email: user.email,
+      role: user.role, 
+      bio: user.bio,
+      status: user.status,
+    };
   }
 
   // GET /getuser/:user_id
@@ -79,10 +82,16 @@ export class UserController {
   async getUserById(@Param('user_id') user_id: string): Promise<any> {
     const user = await this.userService.getUserById(user_id);
 
-    return { username: user.username, email: user.email, role: user.role };
+    return {
+      username: user.username,
+      email: user.email,
+      role: user.role, 
+      bio: user.bio,
+      status: user.status,
+    };
   }
 
-  // DELETE
+  // DELETE /
   @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
   @Delete('')
   async deleteUser(@Request() req: any) {

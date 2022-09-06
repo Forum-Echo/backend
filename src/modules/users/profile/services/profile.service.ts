@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import * as fs from 'fs';
 import { InjectModel } from '@nestjs/mongoose';
 import { Picture } from '../../models/picture.model';
 import { Model } from 'mongoose';
 import { UserService } from '../../services/user.service';
 import { NotFoundException } from '@nestjs/common';
+import * as fs from 'fs';
 
 @Injectable()
 export class ProfileService {
