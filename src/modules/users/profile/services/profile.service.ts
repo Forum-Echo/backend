@@ -24,7 +24,7 @@ export class ProfileService {
     const file = fs.readFileSync(`./src/modules/users/profile/cache/${filename}`);
     
     // Delete file from cache
-    fs.unlink(`./src/modules/users/cache/${filename}`, (err) => {
+    fs.unlink(`./src/modules/users/profile/cache/${filename}`, (err) => {
       return err;
     });
 
@@ -48,7 +48,7 @@ export class ProfileService {
       userId,
     });
 
-    // sav e the new picture
+    // save the new picture
     const result = await newPicture.save();
 
     // Return id of file
