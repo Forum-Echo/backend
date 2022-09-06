@@ -20,7 +20,7 @@ dotenv.config({
     PostModule,
     AdminModule,
     MailModule,
-    MongooseModule.forRoot(process.env.DB_URL),
+    MongooseModule.forRoot(process.env.DB_URL, { dbName: 'test' }),
     ThrottlerModule.forRoot({
       ttl: 60,
       limit: 30,

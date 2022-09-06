@@ -11,6 +11,10 @@ import { APP_GUARD } from '@nestjs/core';
 import { MailModule } from '../mail/mail.module';
 import { VerifyStrategy } from '../auth/strategy/verify.strategy';
 import { SaltSchema } from './models/salt.model';
+import { SharpPipe } from './profile/services/pipes/sharp.pipe';
+import { ProfileService } from './profile/services/profile.service';
+import { PictureSchema } from './models/picture.model';
+import { ProfileController } from './profile/profile.controller';
 
 @Module({
   imports: [
@@ -19,14 +23,17 @@ import { SaltSchema } from './models/salt.model';
     MongooseModule.forFeature([
       { name: 'User', schema: UserSchema },
       { name: 'Salt', schema: SaltSchema },
+      { name: 'Picture', schema: PictureSchema },
     ]),
   ],
-  controllers: [UserController],
+  controllers: [UserController, ProfileController],
   providers: [
     RegisterService,
     UserService,
     VerifyStrategy,
     UserStrategy,
+    SharpPipe,
+    ProfileService,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,

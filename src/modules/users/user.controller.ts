@@ -40,7 +40,7 @@ export class UserController {
   // POST /login
   @UseGuards(LocalAuthGuard, VerifyGuard)
   @Post('login')
-  async login(@Request() req): Promise<any> {
+  async login(@Request() req: any): Promise<any> {
     const token = await this.authService.login(req.user);
     const user = await this.userService.getUserByName(req.user.username);
 
@@ -68,32 +68,49 @@ export class UserController {
   async getUser(@Request() req: any): Promise<any> {
     const user = await this.userService.getUserById(req.user.id);
 
-    return { username: user.username, email: user.email, role: user.role };
+    return {
+      username: user.username,
+      email: user.email,
+      role: user.role, 
+      bio: user.bio,
+      status: user.status,
+    };
   }
 
+  // GET /getuser/:user_id
   @Get('getuser/:user_id')
-  async getUserById(@Param('user_id') user_id): Promise<any> {
+  async getUserById(@Param('user_id') user_id: string): Promise<any> {
     const user = await this.userService.getUserById(user_id);
 
-    return { username: user.username, email: user.email, role: user.role };
+    return {
+      username: user.username,
+      email: user.email,
+      role: user.role, 
+      bio: user.bio,
+      status: user.status,
+    };
   }
 
+  // DELETE /
   @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
   @Delete('')
   async deleteUser(@Request() req: any) {
     return this.userService.deleteUser(req.user.id);
   }
 
+  // PATCH /verify
   @Patch('verify')
-  async verifyUser(@Body('token') token): Promise<any> {
+  async verifyUser(@Body('token') token: string): Promise<any> {
     return this.userService.verifyUser(token);
   }
 
+  // GET forget-password/:email
   @Get('forget-password/:email')
   async forgotPassword(@Param('email') email: string): Promise<any> {
     return this.userService.sendPasswordConfirmation(email);
   }
 
+  // PATCH reset-password
   @Patch('reset-password')
   async resetPassword(
     @Body('token') token: string,
