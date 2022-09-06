@@ -31,7 +31,7 @@ export class ProfileController {
     return this.profileService.getPicture(userId);
   }
 
-  // POST /bio
+  // PATCH /bio
   @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
   @Patch('bio')
   async editBio(
