@@ -9,6 +9,7 @@ export const UserSchema = new mongoose.Schema({
   role: { type: String || Object, required: true },
   token: { type: String, required: false },
   bio: { type: String, required: false },
+  pictureId: { type: String, required: false },
 });
 
 export interface User {
@@ -20,4 +21,5 @@ export interface User {
   role: string;
   token: string | null;
   bio: string | null;
+  pictureId: string;
 }
