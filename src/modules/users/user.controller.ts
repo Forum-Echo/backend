@@ -43,7 +43,7 @@ export class UserController {
   // POST /login
   @UseGuards(LocalAuthGuard, VerifyGuard)
   @Post('login')
-  async login(@Request() req): Promise<any> {
+  async login(@Request() req: any): Promise<any> {
     const token = await this.authService.login(req.user);
     const user = await this.userService.getUserByName(req.user.username);
 
@@ -76,7 +76,7 @@ export class UserController {
 
   // GET /getuser/:user_id
   @Get('getuser/:user_id')
-  async getUserById(@Param('user_id') user_id): Promise<any> {
+  async getUserById(@Param('user_id') user_id: string): Promise<any> {
     const user = await this.userService.getUserById(user_id);
 
     return { username: user.username, email: user.email, role: user.role };
@@ -91,7 +91,7 @@ export class UserController {
 
   // PATCH /verify
   @Patch('verify')
-  async verifyUser(@Body('token') token): Promise<any> {
+  async verifyUser(@Body('token') token: string): Promise<any> {
     return this.userService.verifyUser(token);
   }
 

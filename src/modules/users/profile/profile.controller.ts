@@ -40,4 +40,15 @@ export class ProfileController {
   ): Promise<any> {
       return this.profileService.editBio(userId, content);
   }
+
+  // PATCH /status
+  @UseGuards(JwtAuthGuard, UserGuard, VerifyGuard)
+  @Patch('status')
+  async editStatus(
+    @Body('userId') userId: string,
+    @Body('content') content: string,
+    @Body('emoji') emoji: string,
+  ): Promise<any> {
+      return this.profileService.editStatus(userId, content, emoji);
+  }
 }

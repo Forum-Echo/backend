@@ -56,7 +56,7 @@ export class ProfileService {
   }
 
   // ---- Bio ---- //
-  async  editBio(userId: string, content: string): Promise<any> {
+  async editBio(userId: string, content: string): Promise<any> {
     const user = await this.userService.getUserById(userId);
 
       if (!user) {
@@ -67,5 +67,19 @@ export class ProfileService {
 
       const result = await user.save();
       return { success: result.bio };
+  }
+
+  // ---- Status ---- //
+  async editStatus(userId: string, content: string, emoji: string): Promise<any> {
+    const user = await this.userService.getUserById(userId);
+
+      if (!user) {
+        throw new NotFoundException('user_not_found');
+      }
+
+      user.status = `${emoji} ${content}`;
+
+      const result = await user.save();
+      return { success: result.status };
   }
 }
