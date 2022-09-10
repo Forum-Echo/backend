@@ -8,6 +8,7 @@ import { PostSchema } from './models/post.model';
 import { PostService } from './services/post.service';
 import { VerifyStrategy } from '../auth/strategy/verify.strategy';
 import { AuthModule } from '../auth/auth.module';
+import { CommentController } from './comments/comments.controller';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { AuthModule } from '../auth/auth.module';
     MongooseModule.forFeature([{ name: 'Post', schema: PostSchema }]),
   ],
   providers: [PostService, UserStrategy, VerifyStrategy, VoteService],
-  controllers: [PostController],
+  controllers: [PostController, CommentController],
 })
 export class PostModule {}
