@@ -50,6 +50,7 @@ export class PostService {
       dislikedBy: [],
       created: new Date(),
       updated: null,
+      type: false,
     });
 
     let posts;
