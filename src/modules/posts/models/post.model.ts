@@ -8,7 +8,8 @@ export const PostSchema = new mongoose.Schema({
   dislikedBy: { type: Array, required: true },
   created: { type: Date, required: true },
   updated: { type: Date || null },
-  comments: { type: Array, required: true },
+  comments: { type: Array, required: false },
+  type: { type: Boolean, required: true }, // true = comment, false = post
 });
 
 export interface Post {
@@ -19,5 +20,6 @@ export interface Post {
   dislikedBy: string[];
   created: Date;
   updated: Date | null;
-  comments: string[];
+  comments: Post[] | null;
+  type: boolean; // true = comment, false = post
 }
