@@ -36,7 +36,7 @@
     "dotenv": "^16.0.1",
     "ejs": "^3.1.8",
     "handlebars": "^4.7.7",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.4.4",
     "nodemailer": "^6.7.8",
     "passport": "^0.6.0",
