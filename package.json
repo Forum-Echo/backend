@@ -37,7 +37,7 @@
     "ejs": "^3.1.8",
     "handlebars": "^4.7.7",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^6.4.4",
+    "mongoose": "^6.11.3",
     "nodemailer": "^6.7.8",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
